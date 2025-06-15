@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:greenlivinghub/page/JoinCommunities.dart';
 
 void main(){
   runApp(MyApp());
@@ -34,6 +35,12 @@ class HomePage extends StatelessWidget {
               description: 'Explore and join communities passionate about sustainable living.',
               icon: Icons.group,
               image: 'assets/community.jpg',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => JoinCommunities()),
+                );
+              },
             ),
             FeatureCard(
               title: 'Share Tips and Success Stories',
@@ -95,6 +102,7 @@ class FeatureCard extends StatelessWidget {
   final String description;
   final IconData icon;
   final String image;
+  final VoidCallback? onTap;
 
   const FeatureCard({
     Key? key,
@@ -102,45 +110,50 @@ class FeatureCard extends StatelessWidget {
     required this.description,
     required this.icon,
     required this.image,
+    this.onTap,
   }):super(key:key);
 
   @override
+  @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      margin: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Image.asset(
-            image,
-            fit: BoxFit.cover,
-            height: 200,
-          ),
-          Padding(
-            padding: EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  icon,
-                  size: 40,
-                  color: Theme.of(context).primaryColor,
-                ),
-                SizedBox(height: 10),
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Text(description),
-              ],
+    return InkWell( // 👈 Wrap Card with InkWell
+      onTap: onTap,
+      child: Card(
+        elevation: 5,
+        margin: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Image.asset(
+              image,
+              fit: BoxFit.cover,
+              height: 200,
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.all(15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    icon,
+                    size: 40,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Text(description),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
