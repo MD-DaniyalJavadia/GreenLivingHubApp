@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:greenlivinghub/page/JoinCommunities.dart';
+import 'package:greenlivinghub/carbontracker/screens/calculator.dart';
+import 'package:greenlivinghub/carbontracker/screens/home_navigator.dart';
+import 'package:greenlivinghub/carbontracker/service/shared_preferences_service.dart';
 
-void main(){
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreferenceService.init(); // This must be here!
   runApp(MyApp());
 }
 
@@ -83,7 +89,18 @@ class HomePage extends StatelessWidget {
               description:'Monitor and reduce your carbon footprint with personalized tracking tools.',
               icon: Icons.timeline,
               image: 'assets/carbon_footprint.jpg',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => SharedPreferenceService.firstTimeOpeningApp
+                        ? const Calculator()
+                        : const HomeNavigator(),
+                  ),
+                );
+              },
             ),
+
             FeatureCard(
               title: 'Shop Sustainable Products',
               description:'Explore and purchase eco-friendly products from verified vendors.',
