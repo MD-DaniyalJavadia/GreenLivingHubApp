@@ -116,8 +116,12 @@ class _CalculatorState extends State<Calculator> {
         SharedPreferenceService.oreUsoTabletNormalized =
             ((oreUsoTablet ?? 0) / 24) * 5;
 
-        Navigator.of(context).pushNamed("h");
-      },
+        Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => const HomeNavigator(),
+    ),
+  );
+},
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

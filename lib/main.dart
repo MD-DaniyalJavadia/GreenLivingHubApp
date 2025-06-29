@@ -20,7 +20,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: HomePage(),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => HomePage(),
+        "h": (context) => const HomeNavigator(), // Add this route
+      },
     );
   }
 }
