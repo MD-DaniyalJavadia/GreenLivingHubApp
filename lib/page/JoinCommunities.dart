@@ -1,146 +1,97 @@
 import 'package:flutter/material.dart';
 
 class JoinCommunities extends StatelessWidget {
+  const JoinCommunities({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Join Communities'),
+        title: const Text('Join Communities'),
+        backgroundColor: Theme.of(context).primaryColor,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Join Communities',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            _ShareCard(
+            _buildSectionHeader(context, 'Community Updates'),
+            const _ShareCard(
               title: 'Tip Of The Day',
               content: 'Use reusable bags when grocery shopping!',
+              icon: Icons.lightbulb_outline,
             ),
-            _ShareCard(
+            const _ShareCard(
               title: 'Success Story',
               content: 'Reduced household waste by 50% by composting and recycling!',
+              icon: Icons.celebration,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Popular Communities',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            _CommunityCard(
+            _buildSectionHeader(context, 'Popular Communities'),
+            const _CommunityCard(
               communityName: 'Eco Warriors',
               membersCount: 1200,
+              communityImage: 'assets/eco_warriors.jpg',
             ),
-            _CommunityCard(
+            const _CommunityCard(
               communityName: 'Green Living Enthusiasts',
               membersCount: 800,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Achievements',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            _AchievementCard(
-              achivement: 'Planted 100 Trees',
-              image: 'assets/tree.jpg',
-            ),
-            _AchievementCard(
-              achivement: 'Installed Solar Panels',
-              image: 'assets/solar_panel.jpg',
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Share On Social Media',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Social sharing logic
-              },
-              child: Text('Share'),
+              communityImage: 'assets/green_living.jpg',
             ),
           ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Implement social sharing logic here
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Sharing to social media...')),
+          );
+        },
+        child: const Icon(Icons.share),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(BuildContext context, String title) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).primaryColor,
         ),
       ),
     );
   }
 }
 
-class _AchievementCard extends StatelessWidget {
-  final String achivement;
-  final String image;
-
-  const _AchievementCard({
-    required this.achivement,
-    required this.image,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.asset(
-            image,
-            height: 150,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              achivement,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 class _ShareCard extends StatelessWidget {
   final String title;
   final String content;
+  final IconData icon;
 
   const _ShareCard({
     required this.title,
     required this.content,
+    required this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      elevation: 4.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: ListTile(
-        title: Text(title),
+        leading: CircleAvatar(
+          backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+          child: Icon(icon, color: Theme.of(context).primaryColor),
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         subtitle: Text(content),
       ),
     );
@@ -150,25 +101,37 @@ class _ShareCard extends StatelessWidget {
 class _CommunityCard extends StatelessWidget {
   final String communityName;
   final int membersCount;
+  final String communityImage;
 
   const _CommunityCard({
     required this.communityName,
     required this.membersCount,
+    required this.communityImage,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      elevation: 4.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: ListTile(
-        title: Text(communityName),
+        leading: CircleAvatar(
+          backgroundImage: AssetImage(communityImage),
+        ),
+        title: Text(
+          communityName,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         subtitle: Text('$membersCount members'),
-        trailing: Icon(Icons.arrow_forward),
+        trailing: const Icon(Icons.arrow_forward_ios, size: 16.0),
         onTap: () {
-          // Add navigation or detail logic here
+          // Implement navigation to community details
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Navigating to $communityName')),
+          );
         },
       ),
     );
   }
 }
-

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:greenlivinghub/page/JoinCommunities.dart';
+import 'package:greenlivinghub/page/shoppingGuide.dart';
+import 'package:greenlivinghub/page/about_page.dart';
+import 'package:greenlivinghub/page/contact_page.dart';
 import 'package:greenlivinghub/carbontracker/screens/calculator.dart';
 import 'package:greenlivinghub/carbontracker/screens/home_navigator.dart';
+import 'package:greenlivinghub/page/achievements_page.dart';
+import 'package:greenlivinghub/page/tips_and_stories_page.dart';
 import 'package:greenlivinghub/carbontracker/service/shared_preferences_service.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +16,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  @override
+  @override 
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -23,7 +27,7 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => HomePage(),
-        "h": (context) => const HomeNavigator(), // Add this route
+        "h": (context) => const HomeNavigator(),
       },
     );
   }
@@ -35,6 +39,52 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('GreenLivingHub'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+              ),
+              child: const Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'),
+              onTap: () {
+                Navigator.pop(context); // Already on home
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.info),
+              title: Text('About'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AboutPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.contact_mail),
+              title: Text('Contact Us'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ContactPage()),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -57,12 +107,24 @@ class HomePage extends StatelessWidget {
               description: 'Share Valuable Tips, Tricks and Success Stories Related To Sustainable Living',
               icon: Icons.lightbulb_outline,
               image: 'assets/tips.jpg',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const TipsAndStoriesPage()),
+                );
+              },
             ),
             FeatureCard(
               title: 'Share Achievements',
               description:'Celebrate sustainability milestones by sharing achievements within the app.',
               icon: Icons.star,
               image: 'assets/achievements.jpg',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AchievementsPage()),
+                );
+              },
             ),
             FeatureCard(
               title: 'Customizable Sharing',
@@ -104,12 +166,17 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
-
             FeatureCard(
-              title: 'Shop Sustainable Products',
-              description:'Explore and purchase eco-friendly products from verified vendors.',
+              title: 'Eco Friendly Shopping Guide',
+              description: 'Explore and purchase eco-friendly products from verified vendors.',
               icon: Icons.shopping_cart,
               image: 'assets/shopping.jpg',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EcoFriendlyShoppingScreen()),
+                );
+              },
             ),
           ],
         ),
@@ -132,12 +199,11 @@ class FeatureCard extends StatelessWidget {
     required this.icon,
     required this.image,
     this.onTap,
-  }):super(key:key);
+  }) : super(key: key);
 
   @override
-  @override
   Widget build(BuildContext context) {
-    return InkWell( // 👈 Wrap Card with InkWell
+    return InkWell(
       onTap: onTap,
       child: Card(
         elevation: 5,
