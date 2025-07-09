@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "795561920378",
+    "project_id": "greenliving-bf19e",
+    "storage_bucket": "greenliving-bf19e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795561920378:android:c43f2e0d14381e4edf38c3",
+        "android_client_info": {
+          "package_name": "com.example.greenlivinghub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8gm0rS8hDJPKUWho0xewl8kEw14ncXDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

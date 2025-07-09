@@ -5,6 +5,7 @@ import 'package:greenlivinghub/carbontracker/theme/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:greenlivinghub/main.dart';
 
 import 'home_navigator.dart';
 
@@ -329,29 +330,22 @@ class _CalculatorState extends State<Calculator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: widget.back
-            ? InkWell(
-                child: const Icon(
-                  Icons.arrow_back_ios_new,
-                  color: kDarkGreen,
-                ),
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const HomeNavigator(),
-                      ),);
-                },
-              )
-            : Container(),
-        centerTitle: false,
-        title: Text(
-          "CarbonSense Calculator",
-          style: GoogleFonts.montserrat(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+    appBar: AppBar(
+  leading: widget.back
+      ? IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: kDarkGreen),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const MyApp()),
+            );
+          },
+        )
+      : null,
+  title: Text(
+    "CarbonSense Calculator",
+    style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
+  ),
+),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: PageView(
