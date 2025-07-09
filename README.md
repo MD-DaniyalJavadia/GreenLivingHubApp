@@ -48,6 +48,6 @@ We welcome contributions! Feel free to open a pull request or issue to suggest c
 
 📧 Contact
 Have questions, ideas, or feedback? Reach us through the Contact Us page in the app or email us at:
-📩 greenlivinghub@example.com
+📩 daniyaljavadiaworks@gmail.com
 
 🌍 Live Green. Live Smart.
