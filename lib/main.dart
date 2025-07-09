@@ -16,7 +16,7 @@ import 'package:greenlivinghub/page/visual_achievements_page.dart';
 import 'package:greenlivinghub/page/discover_events_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
+import 'package:firebase_auth/firebase_auth.dart'; // Firebase Auth import
 
 
 void main() async {
@@ -53,17 +53,55 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('GreenLivingHub'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/login');
-            },
-            child: const Text(
-              'Login / Signup',
-              style: TextStyle(color: Colors.black),
+          actions: [
+            StreamBuilder(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                final user = snapshot.data;
+                if (user == null) {
+                  // Not logged in
+                  return TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    child: const Text(
+                      'Login / Signup',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  );
+                } else {
+                  // Logged in user
+                  return PopupMenuButton<String>(
+                    onSelected: (value) {
+                      if (value == 'logout') {
+                        FirebaseAuth.instance.signOut();
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.account_circle, color: Colors.black),
+                          const SizedBox(width: 5),
+                          Text(
+                            user.displayName ?? user.email ?? 'User',
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: 'logout',
+                        child: Text('Logout'),
+                      ),
+                    ],
+                  );
+                }
+              },
             ),
-          ),
-        ],
+          ],
+
       ),
       drawer: Drawer(
         child: ListView(
