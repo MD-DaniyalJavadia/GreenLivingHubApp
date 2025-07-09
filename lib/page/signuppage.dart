@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Firebase Auth import
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -14,18 +15,42 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   bool _obscurePassword = true;
+  bool _isLoading = false;
 
-  void _signup() {
+  void _signup() async {
     if (_formKey.currentState!.validate()) {
-      // Handle sign-up logic here (e.g., send to server or Firebase)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Account created successfully!')),
-      );
+      setState(() => _isLoading = true);
+      try {
+        // Firebase Sign Up
+        UserCredential userCredential =
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
 
-      // Optionally: clear fields
-      // _nameController.clear();
-      // _emailController.clear();
-      // _passwordController.clear();
+        // Success
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account created successfully!')),
+        );
+
+        // Optionally: Navigate to login or home
+        Navigator.pushReplacementNamed(context, '/login');
+      } on FirebaseAuthException catch (e) {
+        String error = 'Signup failed.';
+        if (e.code == 'email-already-in-use') {
+          error = 'Email already in use.';
+        } else if (e.code == 'invalid-email') {
+          error = 'Invalid email format.';
+        } else if (e.code == 'weak-password') {
+          error = 'Password is too weak.';
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error)),
+        );
+      } finally {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -89,7 +114,9 @@ class _SignupPageState extends State<SignupPage> {
                   border: const OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.lock),
                   suffixIcon: IconButton(
-                    icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+                    icon: Icon(
+                      _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                    ),
                     onPressed: () {
                       setState(() {
                         _obscurePassword = !_obscurePassword;
@@ -106,15 +133,20 @@ class _SignupPageState extends State<SignupPage> {
               ),
               const SizedBox(height: 30),
 
-              // Signup Button
+              // Sign Up Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _signup,
-                  child: const Text('Sign Up'),
+                  onPressed: _isLoading ? null : _signup,
+                  child: _isLoading
+                      ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                      : const Text('Sign Up'),
                 ),
               ),
-
               const SizedBox(height: 20),
 
               // Login Prompt
